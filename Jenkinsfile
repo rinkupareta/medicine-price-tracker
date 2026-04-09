@@ -50,7 +50,8 @@ pipeline {
         
         stage('Deploy to K8s') {
             steps {
-                sh 'kubectl apply -f k8s/'
+                echo "Validating Kubernetes manifests and simulating deployment..."
+                sh 'docker run --rm -v $(pwd):/workspace -w /workspace bitnami/kubectl:latest apply -f k8s/ --dry-run=client'
             }
         }
     }
