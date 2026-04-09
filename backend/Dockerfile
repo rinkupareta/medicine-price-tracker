@@ -10,7 +10,7 @@ ENV CHROMEDRIVER_PATH=/usr/bin/chromedriver
 
 WORKDIR /app
 
-COPY backend/requirements.txt .
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
