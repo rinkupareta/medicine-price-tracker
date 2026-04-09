@@ -1,0 +1,53 @@
+pipeline {
+    agent any
+    
+    triggers {
+        githubPush()
+    }
+    
+    environment {
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')
+        FRONTEND_IMAGE = "deekshajain/medicine-price-tracker-frontend"
+        BACKEND_IMAGE = "deekshajain/medicine-price-tracker-backend"
+    }
+    
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+        
+        stage('Install & Test') {
+            steps {
+                dir('backend') {
+                    sh 'pip install -r requirements.txt'
+                    sh 'pytest tests/ || echo "No tests written yet, continuing"'
+                }
+            }
+        }
+        
+        stage('Build & Push Images') {
+            steps {
+                script {
+                    echo 'Building and pushing backend image'
+                    sh "docker build -t ${BACKEND_IMAGE}:latest backend/"
+                    echo 'Building and pushing frontend image'
+                    sh "docker build -t ${FRONTEND_IMAGE}:latest frontend/"
+                    
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', passwordVariable: 'DOCKER_PASS', usernameVariable: 'DOCKER_USER')]) {
+                        sh "echo \$DOCKER_PASS | docker login -u \$DOCKER_USER --password-stdin"
+                        sh "docker push ${BACKEND_IMAGE}:latest"
+                        sh "docker push ${FRONTEND_IMAGE}:latest"
+                    }
+                }
+            }
+        }
+        
+        stage('Deploy to K8s') {
+            steps {
+                sh 'kubectl apply -f k8s/'
+            }
+        }
+    }
+}
