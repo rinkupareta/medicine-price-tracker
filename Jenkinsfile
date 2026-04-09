@@ -20,9 +20,11 @@ pipeline {
         
         stage('Install & Test') {
             steps {
-                dir('backend') {
-                    sh 'pip install -r requirements.txt'
-                    sh 'pytest tests/ || echo "No tests written yet, continuing"'
+                script {
+                    echo 'Building backend image for testing...'
+                    sh "docker build -t ${BACKEND_IMAGE}:test backend/"
+                    echo 'Running tests inside isolated container...'
+                    sh "docker run --rm ${BACKEND_IMAGE}:test bash -c 'pytest tests/ || echo \"No tests written yet, continuing\"'"
                 }
             }
         }
