@@ -40,8 +40,8 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', passwordVariable: 'DOCKER_PASS', usernameVariable: 'DOCKER_USER')]) {
                         sh '''
                         echo -n "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-                        docker push deekshajain/medicine-price-tracker-backend:latest
-                        docker push deekshajain/medicine-price-tracker-frontend:latest
+                        docker push deeksha2008/medicine-price-tracker-backend:latest
+                        docker push deeksha2008/medicine-price-tracker-frontend:latest
                         '''
                     }
                 }
