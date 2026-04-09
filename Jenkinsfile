@@ -7,8 +7,8 @@ pipeline {
     
     environment {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')
-        FRONTEND_IMAGE = "deekshajain/medicine-price-tracker-frontend"
-        BACKEND_IMAGE = "deekshajain/medicine-price-tracker-backend"
+        FRONTEND_IMAGE = "deeksha2008/medicine-price-tracker-frontend"
+        BACKEND_IMAGE = "deeksha2008/medicine-price-tracker-backend"
     }
     
     stages {
@@ -38,9 +38,11 @@ pipeline {
                     sh "docker build -t ${FRONTEND_IMAGE}:latest frontend/"
                     
                     withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', passwordVariable: 'DOCKER_PASS', usernameVariable: 'DOCKER_USER')]) {
-                        sh "echo \$DOCKER_PASS | docker login -u \$DOCKER_USER --password-stdin"
-                        sh "docker push ${BACKEND_IMAGE}:latest"
-                        sh "docker push ${FRONTEND_IMAGE}:latest"
+                        sh '''
+                        echo -n "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                        docker push deekshajain/medicine-price-tracker-backend:latest
+                        docker push deekshajain/medicine-price-tracker-frontend:latest
+                        '''
                     }
                 }
             }
