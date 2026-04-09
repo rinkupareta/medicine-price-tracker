@@ -3,7 +3,7 @@ from ml_service.price_predictor import predict_price
 from ml_service.stockout_detector import predict_stockout
 from ml_service.generic_suggester import suggest_generic
 
-router = APIRouter(prefix="/api/ml")
+router = APIRouter()
 
 @router.get("/predict-price")
 def get_price(medicine: str, platform: str = "PharmEasy"):

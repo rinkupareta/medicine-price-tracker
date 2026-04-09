@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-function MLInsights({ query }) {
+function MLInsights({ query, currentLowest }) {
   const [insight, setInsight] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -10,10 +10,7 @@ function MLInsights({ query }) {
     const fetchInsight = async () => {
       setLoading(true);
       try {
-        const res = await fetch(
-          `http://127.0.0.1:8000/api/ml/generic-alternative?medicine=${query}`
-        );
-
+        const res = await fetch(`http://localhost:8000/api/ml/generic-alternative?medicine=${query}`);
         const data = await res.json();
         setInsight(data);
       } catch (err) {
@@ -28,20 +25,39 @@ function MLInsights({ query }) {
   if (!query) return null;
 
   return (
-    <div>
-      <h2>ML Insight</h2>
+    <div className="ml-card">
+      <h2>ML Price Insights</h2>
+      <p className="ml-subtitle">AI-powered alternative suggestions & trends</p>
 
-      {loading && <p>🔄 Loading ML...</p>}
+      {loading && <p className="loading-state">Analyzing price trends...</p>}
 
-      {insight && insight.found && (
-        <div>
-          <p><b>Generic:</b> {insight.generic_name}</p>
-          <p><b>Avg Price:</b> ₹{insight.avg_price}</p>
-          <p>{insight.message}</p>
+      {insight && insight.found ? (
+        <div className="ml-content-box">
+          <div className="ml-stat-row">
+            <span className="ml-stat-label">Generic Alternative</span>
+            <span className="ml-stat-value">{insight.generic_name}</span>
+          </div>
+          <div className="ml-stat-row">
+            <span className="ml-stat-label">Avg Market Price</span>
+            <span className="ml-stat-value" style={{color: "var(--text-muted)"}}>₹{insight.avg_price}</span>
+          </div>
+          {currentLowest && (
+            <div className="ml-stat-row">
+              <span className="ml-stat-label">Current Lowest Found</span>
+              <span className="ml-stat-value" style={{color: "var(--accent-teal)"}}>₹{currentLowest}</span>
+            </div>
+          )}
+          <div className="ml-alert">
+            💡 {insight.message}
+          </div>
         </div>
+      ) : (
+        insight && !insight.found && (
+          <div className="ml-content-box">
+            <p style={{color: "var(--text-muted)", fontSize: "14px"}}>{insight.message}</p>
+          </div>
+        )
       )}
-
-      {insight && !insight.found && <p>{insight.message}</p>}
     </div>
   );
 }

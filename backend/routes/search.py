@@ -3,7 +3,7 @@ import sys
 import os
 
 # Add scrapers folder to path
-sys.path.append(os.path.join(os.path.dirname(__file__), '../../scrapers'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '../scrapers'))
 
 from pharmeasy import scrape_pharmeasy
 from onemg import scrape_onemg
