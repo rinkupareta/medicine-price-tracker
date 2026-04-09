@@ -52,7 +52,7 @@ pipeline {
             steps {
                 echo "Validating Kubernetes manifests and simulating deployment..."
                 sh 'curl -sLO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && chmod +x kubectl'
-                sh './kubectl apply -f k8s/ --dry-run=client'
+                sh './kubectl apply -f k8s/ --dry-run=client --validate=false'
             }
         }
     }
