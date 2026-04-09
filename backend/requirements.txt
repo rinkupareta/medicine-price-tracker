@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+selenium
+pandas
+scikit-learn
+requests
+python-dotenv
+hvac
+elasticsearch
+pytest
+httpx
