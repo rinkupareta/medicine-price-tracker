@@ -1,6 +1,6 @@
 import React from 'react';
 
-function ResultsTable({ results }) {
+function ResultsTable({ results, onAddToCart }) {
   if (!results || !results.results || results.results.length === 0) {
     return (
       <div className="results-card">
@@ -18,6 +18,7 @@ function ResultsTable({ results }) {
             <th>Price</th>
             <th>Pharmacy</th>
             <th>Availability</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -32,6 +33,24 @@ function ResultsTable({ results }) {
               <td className="price-tag">₹{item.price}</td>
               <td><span className="plat-badge">{item.platform}</span></td>
               <td><span className="badge-stock">In Stock</span></td>
+              <td>
+                <div className="actions-cell">
+                  <a 
+                    href={`https://www.google.com/search?q=${encodeURIComponent((item.name || results.query) + ' ' + item.platform)}`} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="btn-action btn-buy"
+                  >
+                    Buy Now ↗
+                  </a>
+                  <button 
+                    className="btn-action btn-cart" 
+                    onClick={() => onAddToCart && onAddToCart(item)}
+                  >
+                    Add to Cart
+                  </button>
+                </div>
+              </td>
             </tr>
           ))}
         </tbody>
