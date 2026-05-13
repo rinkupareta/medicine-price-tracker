@@ -36,7 +36,7 @@ function App() {
     setActiveTab('home');
 
     try {
-      const response = await fetch(`http://localhost:8000/api/search?query=${encodeURIComponent(medicine)}`);
+      const response = await fetch(`http://localhost:8001/api/search?query=${encodeURIComponent(medicine)}`);
       if (!response.ok) throw new Error('Search failed');
       const data = await response.json();
       setResults(data);
@@ -61,36 +61,36 @@ function App() {
       default:
         return (
           <div className="fade-in">
-            <div className="home-hero" style={{textAlign: 'center', marginBottom: '40px'}}>
-              <h1 style={{fontSize: '36px', marginBottom: '10px', textShadow: '0 0 20px rgba(20, 184, 166, 0.3)'}}>
+            <div className="home-hero" style={{ textAlign: 'center', marginBottom: '40px' }}>
+              <h1 style={{ fontSize: '36px', marginBottom: '10px', textShadow: '0 0 20px rgba(20, 184, 166, 0.3)' }}>
                 Smart Medicine Price Tracker
               </h1>
-              <p style={{color: 'var(--text-muted)', fontSize: '16px'}}>
+              <p style={{ color: 'var(--text-muted)', fontSize: '16px' }}>
                 Compare prices, track trends, and find generic alternatives across top Indian pharmacies.
               </p>
             </div>
-            
+
             <SearchBar onSearch={handleSearch} />
-            
-            {loading && <div className="loading-state" style={{marginTop: '40px', textAlign: 'center'}}>🔄 Fetching live prices from all pharmacies...</div>}
+
+            {loading && <div className="loading-state" style={{ marginTop: '40px', textAlign: 'center' }}>🔄 Fetching live prices from all pharmacies...</div>}
             {error && <div style={{ color: '#ef4444', margin: '40px 0', fontWeight: '500', textAlign: 'center' }}>{error}</div>}
-            
+
             {(results || query) && !loading && (
-              <div className="main-grid" style={{marginTop: '40px'}}>
+              <div className="main-grid" style={{ marginTop: '40px' }}>
                 <div className="results-wrapper">
-                   <ResultsTable results={results} onAddToCart={handleAddToCart} />
+                  <ResultsTable results={results} onAddToCart={handleAddToCart} />
                 </div>
                 <div className="insights-wrapper">
-                   <MLInsights query={query} currentLowest={results?.results?.[0]?.price} />
+                  <MLInsights query={query} currentLowest={results?.results?.[0]?.price} />
                 </div>
               </div>
             )}
-            
+
             {!results && !query && !loading && (
-              <div className="empty-state" style={{marginTop: '60px'}}>
-                <div style={{fontSize: '64px', marginBottom: '20px', opacity: 0.5}}>💊</div>
+              <div className="empty-state" style={{ marginTop: '60px' }}>
+                <div style={{ fontSize: '64px', marginBottom: '20px', opacity: 0.5 }}>💊</div>
                 <h3>Compare Medicine Prices</h3>
-                <p style={{color: 'var(--text-muted)', marginTop: '10px'}}>Search for any medicine to instantly compare prices across PharmEasy, Netmeds, Apollo, and 1mg.</p>
+                <p style={{ color: 'var(--text-muted)', marginTop: '10px' }}>Search for any medicine to instantly compare prices across PharmEasy, Netmeds, Apollo, and 1mg.</p>
               </div>
             )}
           </div>
@@ -101,7 +101,7 @@ function App() {
   return (
     <div className="app-container">
       <nav className="top-nav">
-        <div className="nav-brand" onClick={() => setActiveTab('home')} style={{cursor: 'pointer'}}>
+        <div className="nav-brand" onClick={() => setActiveTab('home')} style={{ cursor: 'pointer' }}>
           <span role="img" aria-label="pill">💊</span> MediCompare
         </div>
         <div className="nav-tabs">
@@ -114,7 +114,7 @@ function App() {
         </div>
       </nav>
 
-      <div className="app-content" style={{marginTop: '40px'}}>
+      <div className="app-content" style={{ marginTop: '40px' }}>
         {renderContent()}
       </div>
 

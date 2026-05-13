@@ -10,7 +10,7 @@ function MLInsights({ query, currentLowest }) {
     const fetchInsight = async () => {
       setLoading(true);
       try {
-        const res = await fetch(`http://localhost:8000/api/ml/generic-alternative?medicine=${query}`);
+        const res = await fetch(`http://localhost:8001/api/ml/generic-alternative?medicine=${query}`);
         const data = await res.json();
         setInsight(data);
       } catch (err) {
@@ -39,12 +39,12 @@ function MLInsights({ query, currentLowest }) {
           </div>
           <div className="ml-stat-row">
             <span className="ml-stat-label">Avg Market Price</span>
-            <span className="ml-stat-value" style={{color: "var(--text-muted)"}}>₹{insight.avg_price}</span>
+            <span className="ml-stat-value" style={{ color: "var(--text-muted)" }}>₹{insight.avg_price}</span>
           </div>
           {currentLowest && (
             <div className="ml-stat-row">
               <span className="ml-stat-label">Current Lowest Found</span>
-              <span className="ml-stat-value" style={{color: "var(--accent-teal)"}}>₹{currentLowest}</span>
+              <span className="ml-stat-value" style={{ color: "var(--accent-teal)" }}>₹{currentLowest}</span>
             </div>
           )}
           <div className="ml-alert">
@@ -54,7 +54,7 @@ function MLInsights({ query, currentLowest }) {
       ) : (
         insight && !insight.found && (
           <div className="ml-content-box">
-            <p style={{color: "var(--text-muted)", fontSize: "14px"}}>{insight.message}</p>
+            <p style={{ color: "var(--text-muted)", fontSize: "14px" }}>{insight.message}</p>
           </div>
         )
       )}

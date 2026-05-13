@@ -1,21 +1,16 @@
 version: '3.8'
 
 services:
-  # ---------------------
-  # Application Services
-  # ---------------------
   backend:
     build:
       context: ./backend
-      dockerfile: Dockerfile
     ports:
-      - "8000:8000"
+      - "8001:8000"
     environment:
       - ELASTICSEARCH_HOST=http://elasticsearch:9200
       - VAULT_ADDR=http://vault:8200
       - VAULT_TOKEN=root
     depends_on:
-      - elasticsearch
       - vault
     networks:
       - app-network
@@ -23,61 +18,69 @@ services:
   frontend:
     build:
       context: ./frontend
-      dockerfile: Dockerfile
     ports:
       - "3000:80"
     networks:
       - app-network
 
-  # ---------------------
-  # ELK Stack
-  # ---------------------
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.1
-    environment:
-      - discovery.type=single-node
-      - xpack.security.enabled=false
-      - ES_JAVA_OPTS=-Xms512m -Xmx512m
-    ports:
-      - "9200:9200"
-    networks:
-      - app-network
+#  elasticsearch:
+ #   image: docker.elastic.co/elasticsearch/elasticsearch:8.11.1
+  #  environment:
+   #   - discovery.type=single-node
+    #  - xpack.security.enabled=false
+   # ports:
+   #   - "9200:9200"
+   # networks:
+    #  - app-network
 
-  logstash:
-    image: docker.elastic.co/logstash/logstash:8.11.1
-    volumes:
-      - ./elk/logstash.conf:/usr/share/logstash/pipeline/logstash.conf:ro
-    ports:
-      - "5044:5044"
-    depends_on:
-      - elasticsearch
-    networks:
-      - app-network
+#  logstash:
+#   image: docker.elastic.co/logstash/logstash:8.11.1
+#    volumes:
+#      - ./elk/logstash.conf:/usr/share/logstash/pipeline/logstash.conf:ro
+#    ports:
+#      - "5044:5044"
+#    depends_on:
+#      - elasticsearch
+#    networks:
+#      - app-network
 
-  kibana:
-    image: docker.elastic.co/kibana/kibana:8.11.1
-    ports:
-      - "5601:5601"
-    environment:
-      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
-    depends_on:
-      - elasticsearch
-    networks:
-      - app-network
+#  kibana:
+#    image: docker.elastic.co/kibana/kibana:8.11.1
+#    ports:
+ #     - "5601:5601"
+ #   environment:
+#      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+#    depends_on:
+#      - elasticsearch
+#    networks:
+#      - app-network
 
-  # ---------------------
-  # Security (Vault)
-  # ---------------------
   vault:
     image: hashicorp/vault:1.15
     ports:
       - "8200:8200"
     environment:
       - VAULT_DEV_ROOT_TOKEN_ID=root
-      - VAULT_DEV_LISTEN_ADDRESS=0.0.0.0:8200
+    networks:
+      - app-network
+
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: jenkins
+    user: root
+    privileged: true
+    ports:
+      - "8081:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - app-network
 
 networks:
   app-network:
     driver: bridge
+
+volumes:
+  jenkins_home:

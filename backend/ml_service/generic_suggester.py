@@ -3,6 +3,10 @@ import logging
 logger = logging.getLogger(__name__)
 
 GENERIC_MAP = {
+     "paracetamol": {
+    "generic": "Paracetamol IP 500mg",
+    "avg_price": 8.00
+},
     "crocin": {"generic": "Paracetamol IP 500mg", "avg_price": 8.00},
     "dolo": {"generic": "Paracetamol IP 650mg", "avg_price": 10.00},
     "combiflam": {"generic": "Ibuprofen + Paracetamol", "avg_price": 12.00},
