@@ -63,4 +63,22 @@ pipeline {
             }
         }
     }
+
+    post {
+    success {
+        emailext(
+            subject: "✅ Jenkins Build SUCCESS: ${env.JOB_NAME}",
+            body: "Build completed successfully.\nBuild URL: ${env.BUILD_URL}",
+            to: "rinku.pareta22@gmail.com"
+        )
+    }
+
+    failure {
+        emailext(
+            subject: "❌ Jenkins Build FAILED: ${env.JOB_NAME}",
+            body: "Build failed.\nCheck logs here: ${env.BUILD_URL}",
+            to: "rinku.pareta22@gmail.com"
+        )
+    }
+}
 }
