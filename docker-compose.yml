@@ -63,9 +63,11 @@ services:
       - VAULT_DEV_ROOT_TOKEN_ID=root
     networks:
       - app-network
-
+ 
   jenkins:
-    image: jenkins/jenkins:lts
+    build:
+      context: .
+      dockerfile: Dockerfile.jenkins
     container_name: jenkins
     user: root
     privileged: true
