@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: deeksha2008/medicine-price-tracker-frontend:latest
+        image: rinkupareta/medicine-price-tracker-frontend:latest
         ports:
         - containerPort: 80
 ---

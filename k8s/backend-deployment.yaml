@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: deeksha2008/medicine-price-tracker-backend:latest
+        image: rinkupareta/medicine-price-tracker-backend:latest
         ports:
         - containerPort: 8000
         env:
