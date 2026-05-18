@@ -29,24 +29,42 @@ pipeline {
             }
         }
         
-        stage('Build & Push Images') {
-            steps {
-                script {
-                    echo 'Building and pushing backend image'
-                    sh "docker build -t ${BACKEND_IMAGE}:latest backend/"
-                    echo 'Building and pushing frontend image'
-                    sh "docker build -t ${FRONTEND_IMAGE}:latest frontend/"
-                    
-                    withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', passwordVariable: 'DOCKER_PASS', usernameVariable: 'DOCKER_USER')]) {
-                        sh '''
-                        echo -n "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-                        docker push rinkupareta/medicine-price-tracker-backend:latest
-                        docker push rinkupareta/medicine-price-tracker-frontend:latest
-                        '''
-                    }
-                }
-            }
-        }
+        stage('Build Backend Image') {
+steps {
+echo 'Building backend image'
+sh "docker build -t ${BACKEND_IMAGE}:latest backend/"
+}
+}
+
+stage('Build Frontend Image') {
+steps {
+echo 'Building frontend image'
+sh "docker build -t ${FRONTEND_IMAGE}:latest frontend/"
+}
+}
+
+stage('Push Docker Images') {
+steps {
+withCredentials([usernamePassword(
+credentialsId: 'dockerhub-credentials',
+passwordVariable: 'DOCKER_PASS',
+usernameVariable: 'DOCKER_USER'
+)]) {
+
+```
+        sh '''
+        echo -n "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+
+        docker push rinkupareta/medicine-price-tracker-backend:latest
+
+        docker push rinkupareta/medicine-price-tracker-frontend:latest
+        '''
+    }
+}
+```
+
+}
+
         stage('Ansible Configuration') {
             steps {
                 echo "Validating Infrastructure Playbooks via Ansible..."
