@@ -51,7 +51,7 @@ passwordVariable: 'DOCKER_PASS',
 usernameVariable: 'DOCKER_USER'
 )]) {
 
-```
+
         sh '''
         echo -n "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
 
@@ -61,9 +61,9 @@ usernameVariable: 'DOCKER_USER'
         '''
     }
 }
-```
 
 }
+
 
 
         stage('Ansible Configuration') {
