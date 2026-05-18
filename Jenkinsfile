@@ -65,6 +65,7 @@ usernameVariable: 'DOCKER_USER'
 
 }
 
+
         stage('Ansible Configuration') {
             steps {
                 echo "Validating Infrastructure Playbooks via Ansible..."
